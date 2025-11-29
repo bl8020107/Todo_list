@@ -1,0 +1,10 @@
+*.class
+*.jar
+*.war
+*.ear
+tasks.json
+.DS_Store
+.idea/
+*.iml
+out/
+
