@@ -21,9 +21,9 @@ public class TaskService {
         return false;
     }
 
-    
-      //Searches tasks by text 
-     
+    /**
+     * Searches tasks by text appearing in title or description
+     */
     public List<Task> search(String searchText) {
         if (searchText == null || searchText.trim().isEmpty()) {
             return repository.listAll();
@@ -45,9 +45,9 @@ public class TaskService {
         return results;
     }
 
-   
-    // Returns list of tasks sorted by status
-    
+    /**
+     * Returns list of tasks sorted by status
+     */
     public List<Task> getTasksSortedByStatus() {
         List<Task> allTasks = repository.listAll();
         
@@ -76,13 +76,17 @@ public class TaskService {
         
         return allTasks;
     }
+//////////////////////////////////
+    /**
+     * Gets all tasks
+     */
+    public List<Task> getAllTasks() {
+        return repository.listAll();
+    }
 
-   
-   
-
-    
-     //Adds a new task
-    
+    /**
+     * Adds a new task
+     */
     public Task addTask(String title, String description) {
         Task task = new Task();
         task.setTitle(title);
@@ -90,20 +94,32 @@ public class TaskService {
         task.setStatus(TaskStatus.NEW);
         return repository.add(task);
     }
+///////////////////////////////////////////
+    /**
+     * Updates a task
+     */
+    public boolean updateTask(int id, String title, String description, TaskStatus status) {
+        Task task = repository.getById(id);
+        if (task != null) {
+            task.setTitle(title);
+            task.setDescription(description);
+            task.setStatus(status);
+            repository.update(task);
+            return true;
+        }
+        return false;
+    }
 
-    
-    
-
-   
-      //Deletes a task
-    
+    /**
+     * Deletes a task
+     */
     public boolean deleteTask(int id) {
         return repository.delete(id);
     }
 
-  /
-    // Gets a task by ID
-   /
+    /**
+     * Gets a task by ID
+     */
     public Task getTaskById(int id) {
         return repository.getById(id);
     }
