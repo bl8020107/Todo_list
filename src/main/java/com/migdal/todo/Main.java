@@ -82,6 +82,61 @@ public class Main {
         System.out.println("Task added successfully! ID: " + task.getId());
     }
 
+    private static void listAllTasks() {
+        System.out.println("--- All Tasks ---");
+        List<Task> tasks = taskService.getAllTasks();
+        
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks found.");
+        } else {
+            for (Task task : tasks) {
+                printTask(task);
+            }
+        }
+    }
+  
+    private static void updateTask() {
+        System.out.println("--- Update Task ---");
+        int id = getIntInput("Enter task ID to update: ");
+        
+        Task existingTask = taskService.getTaskById(id);
+        if (existingTask == null) {
+            System.out.println("Task not found.");
+            return;
+        }
+
+        System.out.println("Current task:");
+        printTask(existingTask);
+        System.out.println();
+
+        String title = getStringInput("Enter new title (or press Enter to keep current): ");
+        if (title.isEmpty()) {
+            title = existingTask.getTitle();
+        }
+
+        String description = getStringInput("Enter new description (or press Enter to keep current): ");
+        if (description.isEmpty()) {
+            description = existingTask.getDescription();
+        }
+
+        System.out.println("Status options: NEW, IN_PROGRESS, DONE");
+        String statusStr = getStringInput("Enter new status (or press Enter to keep current): ");
+        TaskStatus status = existingTask.getStatus();
+        if (!statusStr.isEmpty()) {
+            try {
+                status = TaskStatus.valueOf(statusStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid status. Keeping current status.");
+            }
+        }
+
+        if (taskService.updateTask(id, title, description, status)) {
+            System.out.println("Task updated successfully!");
+        } else {
+            System.out.println("Failed to update task.");
+        }
+    }
+
     private static void deleteTask() {
         System.out.println("--- Delete Task ---");
         int id = getIntInput("Enter task ID to delete: ");
